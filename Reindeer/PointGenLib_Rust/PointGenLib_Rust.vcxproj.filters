@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Text Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Cargo.lock" />
+    <None Include="Cargo.toml" />
+    <None Include="cargobuild_debug.bat" />
+    <None Include="cargobuild_release.bat" />
+    <None Include="src\lib.rs">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PointGenLib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{8f32551f-cba5-4702-83be-6966495ad70c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

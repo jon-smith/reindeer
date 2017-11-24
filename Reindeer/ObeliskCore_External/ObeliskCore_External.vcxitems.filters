@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="HeaderOnly">
+      <UniqueIdentifier>{3132e4e5-3776-434f-acf0-ba62e34d332e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Compiled">
+      <UniqueIdentifier>{16951b3a-b5ae-48f8-a0fa-cd050ec2e830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderOnly\General">
+      <UniqueIdentifier>{a4df83bf-45ae-4f4e-985a-8734a6430100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Compiled\General">
+      <UniqueIdentifier>{083f2652-99a5-4652-9f86-f6d3af95f304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderOnly\EventObserverWithCallbacks">
+      <UniqueIdentifier>{63532b87-f2cd-45bb-a341-08415cad0cbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Compiled\StdWrappers">
+      <UniqueIdentifier>{a2b32266-f216-4b1e-8baa-5ceef04513e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderOnly\Concurrency">
+      <UniqueIdentifier>{dd5e20e4-5934-40b8-826b-96d72320ae13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderOnly\CommandPattern">
+      <UniqueIdentifier>{9bf06793-defb-4f5f-97e4-d6d1e8deb453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Compiled\PlatformSpecific">
+      <UniqueIdentifier>{a48e6221-9623-4b34-b360-a6cc30187f34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderOnly\DataManagement">
+      <UniqueIdentifier>{841750f9-f240-4e31-90a5-eb85976a7d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderOnly\Image">
+      <UniqueIdentifier>{33b7f926-7142-4264-85cb-d0819d89d31d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderOnly\Math">
+      <UniqueIdentifier>{91613a69-86ba-4c28-84e9-58fea48fb8f1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)AsyncEvent.h">
+      <Filter>HeaderOnly\EventObserverWithCallbacks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)AsyncEventQueue.h">
+      <Filter>HeaderOnly\EventObserverWithCallbacks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Event.h">
+      <Filter>HeaderOnly\EventObserverWithCallbacks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EventObserver.h">
+      <Filter>HeaderOnly\EventObserverWithCallbacks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SubjectWithEvents.h">
+      <Filter>HeaderOnly\EventObserverWithCallbacks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Command.h">
+      <Filter>HeaderOnly\CommandPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)CommandWithFutureReturn.h">
+      <Filter>HeaderOnly\CommandPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)WaitableCommand.h">
+      <Filter>HeaderOnly\CommandPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)BackBufferT.h">
+      <Filter>HeaderOnly\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)BackgroundContainerProducerT.h">
+      <Filter>HeaderOnly\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)BackgroundThreadDeleter.h">
+      <Filter>HeaderOnly\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ConcurrencyUtilsT.h">
+      <Filter>HeaderOnly\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ConcurrentQueueT.h">
+      <Filter>HeaderOnly\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)DataPollerT.h">
+      <Filter>HeaderOnly\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)MutexedObject.h">
+      <Filter>HeaderOnly\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)PlatformSpecific.h">
+      <Filter>Compiled\PlatformSpecific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GeneralHelpers.h">
+      <Filter>HeaderOnly\General</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ObeliskMeta.h">
+      <Filter>HeaderOnly\General</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)LockFreeConcurrentQueue.h">
+      <Filter>HeaderOnly\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)StdLockUtilsT.h">
+      <Filter>HeaderOnly\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)LockUtilsT.h">
+      <Filter>HeaderOnly\Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)MemoizedValue.h">
+      <Filter>HeaderOnly\General</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Optional.h">
+      <Filter>HeaderOnly\General</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)HeapArray.h">
+      <Filter>HeaderOnly\General</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)StringFuncs.h">
+      <Filter>Compiled\General</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)StdThreadSupportWrappers.h">
+      <Filter>Compiled\StdWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SimpleAsyncTask.h">
+      <Filter>Compiled\StdWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ContainerUtils.h">
+      <Filter>HeaderOnly\General</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)DataSourceBase.h">
+      <Filter>HeaderOnly\DataManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)DataSourceWithPolling.h">
+      <Filter>HeaderOnly\DataManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ImageFilters.hpp">
+      <Filter>HeaderOnly\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)DistributionFunctions.hpp">
+      <Filter>HeaderOnly\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ContainerMaker.hpp">
+      <Filter>HeaderOnly\General</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)FormatString.hpp">
+      <Filter>HeaderOnly\General</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ArrayParamCalc.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ParallelSort.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)PlatformSpecific.cpp">
+      <Filter>Compiled\PlatformSpecific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)StringFuncs.cpp">
+      <Filter>Compiled\General</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)StdThreadSupportWrappers.cpp">
+      <Filter>Compiled\StdWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SimpleAsyncTask.cpp">
+      <Filter>Compiled\StdWrappers</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
