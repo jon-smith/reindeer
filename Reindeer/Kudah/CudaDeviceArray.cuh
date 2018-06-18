@@ -13,6 +13,7 @@ namespace kudah
 	class CudaDeviceArray
 	{
 	public:
+
 		// Initialise empty array of size 'length'
 		CudaDeviceArray(size_t length) :
 			length(length)
@@ -28,21 +29,14 @@ namespace kudah
 			}
 		}
 
-		// Initialise from vector
-		CudaDeviceArray(const std::vector<T> &vec) :
-			length(vec.size())
+		// Initialise from ptr
+		CudaDeviceArray(const T *sourcePtr, size_t n) :
+			CudaDeviceArray(n)
 		{
 			if (length != 0)
 			{
-				// Allocate empty memory
-				auto const mallocStatus = cudaMalloc((void**)&dataPtr, length * sizeof(T));
-				if (mallocStatus != cudaSuccess)
-				{
-					auto const message = obelisk::formatString("Failed to allocate device memory, status code: %d", mallocStatus);
-					throw std::exception(message.c_str());
-				}
 				// Copy contents
-				auto const cpyStatus = cudaMemcpy(dataPtr, reinterpret_cast<const void*>(vec.data()), length * sizeof(T), cudaMemcpyHostToDevice);
+				auto const cpyStatus = cudaMemcpy(dataPtr, reinterpret_cast<const void*>(sourcePtr), length * sizeof(T), cudaMemcpyHostToDevice);
 
 				if (cpyStatus != cudaSuccess)
 				{
@@ -54,10 +48,28 @@ namespace kudah
 			}
 		}
 
+		CudaDeviceArray(const std::vector<T> &vec) :
+			CudaDeviceArray(vec.data()), vec.size())
+		{
+		}
+
+		template <size_t ArraySize>
+		CudaDeviceArray(const std::array<T, ArraySize> &array) :
+			CudaDeviceArray(array.data(), ArraySize)
+		{
+		}
+
 		// Copy device memory back to std::vector
 		std::vector<T> getAsVector() const
 		{
-			std::vector<T> vec(length);
+			std::vector<T> vec;
+			copyToVector(vec);
+			return vec;
+		}
+
+		void copyToVector(std::vector<T> &vec) const
+		{
+			vec.resize(length);
 			if (length != 0)
 			{
 				auto const cpyStatus = cudaMemcpy(vec.data(), dataPtr, length * sizeof(T), cudaMemcpyDeviceToHost);
@@ -67,7 +79,6 @@ namespace kudah
 					throw std::exception(message.c_str());
 				}
 			}
-			return vec;
 		}
 
 		~CudaDeviceArray()
