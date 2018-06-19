@@ -4,10 +4,9 @@
 #include "device_launch_parameters.h"
 #include "cuda_runtime.h"
 
-namespace kudah
-{
-	namespace impl
-	{
+namespace kudah {
+	namespace impl {
+
 		template <typename T>
 		__global__ void addKernel(T *c, const T *a, const T *b)
 		{
@@ -27,7 +26,7 @@ namespace kudah
 			CudaDeviceArray<T> deviceResult(a.size());
 
 			// Launch a kernel on the GPU with one thread for each element.
-			addKernel<<<1, static_cast<unsigned>(a.size())>>>(deviceResult.data(), deviceA.data(), deviceB.data());
+			addKernel << <1, static_cast<unsigned>(a.size()) >> > (deviceResult.data(), deviceA.data(), deviceB.data());
 
 			// Check for any errors launching the kernel
 			auto const postKernelStatus = cudaGetLastError();

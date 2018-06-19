@@ -1,6 +1,3 @@
-#include "cuda_runtime.h"
-#include "device_launch_parameters.h"
-
 #include <stdio.h>
 #include <vector>
 #include <iostream>
@@ -11,19 +8,14 @@
 #include "ContainerMaker.hpp"
 
 #include "..\KudahLib\AddVectorsWrapper.h"
+#include "..\KudahLib\ScopedSetDevice.h"
 
 using namespace kudah;
 
 int main()
 {
-	// Choose which GPU to run on, change this on a multi-GPU system.
-	auto const setDeviceStatus = cudaSetDevice(0);
-	if (setDeviceStatus != cudaSuccess)
-	{
-		fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
-		return {};
-	}
-	
+	const auto setDevice = ScopedCUDASetDevice(0);
+
 	std::vector<int> const a = { 1, 2, 3, 4, 5, 6 };
 	std::vector<int> const b = { 10, 20, 30, 40, 50, 60 };
 
@@ -52,18 +44,9 @@ int main()
 
 		std::cout << resultMessage;
 	}
-	catch (...)
+	catch (const std::exception &e)
 	{
-		fprintf(stderr, "addWithCuda threw an exception");
-		return 1;
-	}
-
-	// cudaDeviceReset must be called before exiting in order for profiling and
-	// tracing tools such as Nsight and Visual Profiler to show complete traces.
-	auto const cudaStatus = cudaDeviceReset();
-	if (cudaStatus != cudaSuccess)
-	{
-		fprintf(stderr, "cudaDeviceReset failed!");
+		std::cout << "Exception: " << e.what() << "\n";
 		return 1;
 	}
 

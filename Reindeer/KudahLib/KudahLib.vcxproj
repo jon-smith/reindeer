@@ -51,6 +51,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -59,7 +60,7 @@
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
-      <CodeGeneration>compute_50,sm_50</CodeGeneration>
+      <CodeGeneration>compute_30,sm_30</CodeGeneration>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -69,6 +70,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -79,16 +81,18 @@
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
-      <CodeGeneration>compute_50,sm_50</CodeGeneration>
+      <CodeGeneration>compute_30,sm_30</CodeGeneration>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AddVectors.cuh" />
     <ClInclude Include="AddVectorsWrapper.h" />
     <ClInclude Include="CudaDeviceArray.cuh" />
+    <ClInclude Include="ScopedSetDevice.h" />
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="AddVectorsWrapper.cpp" />
+    <CudaCompile Include="ScopedSetDevice.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
