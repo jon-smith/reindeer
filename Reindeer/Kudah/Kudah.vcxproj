@@ -158,8 +158,9 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AddVectors.cuh" />
-    <ClInclude Include="CudaDeviceArray.cuh" />
+    <ProjectReference Include="..\KudahLib\KudahLib.vcxproj">
+      <Project>{93268327-a69d-4d82-bb4b-38d0721b8554}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

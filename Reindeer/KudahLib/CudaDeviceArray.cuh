@@ -49,7 +49,7 @@ namespace kudah
 		}
 
 		CudaDeviceArray(const std::vector<T> &vec) :
-			CudaDeviceArray(vec.data()), vec.size())
+			CudaDeviceArray(vec.data(), vec.size())
 		{
 		}
 

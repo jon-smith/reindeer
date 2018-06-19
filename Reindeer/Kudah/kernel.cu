@@ -9,8 +9,8 @@
 #include "StringFuncs.h"
 #include "FormatString.hpp"
 #include "ContainerMaker.hpp"
-#include "CudaDeviceArray.cuh"
-#include "AddVectors.cuh"
+
+#include "..\KudahLib\AddVectorsWrapper.h"
 
 using namespace kudah;
 
@@ -24,8 +24,8 @@ int main()
 		return {};
 	}
 	
-	std::vector<int> const a = { 1, 2, 3, 4, 5 };
-	std::vector<int> const b = { 10, 20, 30, 40, 50 };
+	std::vector<int> const a = { 1, 2, 3, 4, 5, 6 };
+	std::vector<int> const b = { 10, 20, 30, 40, 50, 60 };
 
 	// Add vectors in parallel
 	try

@@ -20,10 +20,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PointGenLib_Rust", "PointGe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kudah", "Kudah\Kudah.vcxproj", "{51CD933E-5B1C-4C75-A490-96DB352E2CCE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KudahLib", "KudahLib\KudahLib.vcxproj", "{93268327-A69D-4D82-BB4B-38D0721B8554}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		ObeliskCore_External\ObeliskCore_External.vcxitems*{45d41acc-2c3c-43d2-bc10-02aa73ffc7c7}*SharedItemsImports = 9
 		ObeliskCore_External\ObeliskCore_External.vcxitems*{51cd933e-5b1c-4c75-a490-96db352e2cce}*SharedItemsImports = 4
+		ObeliskCore_External\ObeliskCore_External.vcxitems*{93268327-a69d-4d82-bb4b-38d0721b8554}*SharedItemsImports = 4
 		ObeliskCore_External\ObeliskCore_External.vcxitems*{ad5c0143-efae-44aa-b903-b5b21e1d476f}*SharedItemsImports = 4
 		ObeliskCore_External\ObeliskCore_External.vcxitems*{b12702ad-abfb-343a-a199-8e24837244a3}*SharedItemsImports = 4
 	EndGlobalSection
@@ -76,6 +79,14 @@ Global
 		{51CD933E-5B1C-4C75-A490-96DB352E2CCE}.Release|x64.Build.0 = Release|x64
 		{51CD933E-5B1C-4C75-A490-96DB352E2CCE}.Release|x86.ActiveCfg = Release|Win32
 		{51CD933E-5B1C-4C75-A490-96DB352E2CCE}.Release|x86.Build.0 = Release|Win32
+		{93268327-A69D-4D82-BB4B-38D0721B8554}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{93268327-A69D-4D82-BB4B-38D0721B8554}.Debug|x64.ActiveCfg = Debug|x64
+		{93268327-A69D-4D82-BB4B-38D0721B8554}.Debug|x64.Build.0 = Debug|x64
+		{93268327-A69D-4D82-BB4B-38D0721B8554}.Debug|x86.ActiveCfg = Debug|x64
+		{93268327-A69D-4D82-BB4B-38D0721B8554}.Release|Any CPU.ActiveCfg = Release|x64
+		{93268327-A69D-4D82-BB4B-38D0721B8554}.Release|x64.ActiveCfg = Release|x64
+		{93268327-A69D-4D82-BB4B-38D0721B8554}.Release|x64.Build.0 = Release|x64
+		{93268327-A69D-4D82-BB4B-38D0721B8554}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
