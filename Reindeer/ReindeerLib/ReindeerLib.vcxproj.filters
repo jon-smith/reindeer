@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="PointSim">
+      <UniqueIdentifier>{d783e825-ffe9-43ab-add6-379fdcddae96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZMQ">
+      <UniqueIdentifier>{da8459d1-ce31-46e9-af6c-aa64e8281f3d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DiffusionSimulator.cpp">
+      <Filter>PointSim</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DiffusionSimulator.h">
+      <Filter>PointSim</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixUtils.hpp">
+      <Filter>PointSim</Filter>
+    </ClInclude>
+    <ClInclude Include="XYZ.hpp">
+      <Filter>PointSim</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

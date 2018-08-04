@@ -1,7 +1,6 @@
-#include "stdafx.h"
 #include "DiffusionSimulator.h"
 
-#include "PointGenLib.h"
+#include "PointGenLib_Rust\PointGenLib.h"
 
 using namespace reindeer;
 
@@ -17,21 +16,21 @@ void DiffusionSimulator::initialise(size_t totalPoints, float width, float heigh
 		// Allocate arrays
 		// Distribute the points across the chunks - if not exactly divisible, the last chunk will have less chunk
 		auto const pointsPerChunk = (totalPoints - 1 / nChunks) + 1UL;
-		auto pointsSoFar = 0UL;
+		auto pointsSoFar = decltype(pointsPerChunk){};
 		for (size_t i = 0; i<data.size(); ++i)
 		{
 			auto const pointsThisChunk = std::min(pointsPerChunk, totalPoints - pointsSoFar);
 			data[i].positions.assign(pointsThisChunk, { 0.f,0.f,0.f });
-			data[i].colours.assign(3 * pointsThisChunk, 0.f);
+			data[i].colours.assign(3 * pointsThisChunk, 0);
 			pointsSoFar += pointsThisChunk;
 		}
 
 		auto const randomXGen = [max = midPointX*2.0](){
-			return pointgen_random_uniform_double()*max;
+			return static_cast<float>(pointgen_random_uniform_double()*max);
 		};
 
 		auto const randomYGen = [max = midPointY*2.0](){
-			return pointgen_random_uniform_double()*max;
+			return static_cast<float>(pointgen_random_uniform_double()*max);
 		};
 
 		// Random initial positions
@@ -85,7 +84,7 @@ std::chrono::nanoseconds DiffusionSimulator::updateColours(DataT &data)
 			// Base colour on Z position
 			d.colours[3 * i] = 255;
 			d.colours[3 * i + 1] = 0;
-			d.colours[3 * i + 2] = std::min(255.f, std::max(0.f, 5.f*d.positions[i].z + (255.f*0.5f)));
+			d.colours[3 * i + 2] = static_cast<unsigned char>(std::min(255.f, std::max(0.f, 5.f*d.positions[i].z + (255.f*0.5f))));
 		}
 	}
 	return std::chrono::high_resolution_clock::now() - beforeTime;

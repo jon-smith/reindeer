@@ -9,8 +9,8 @@
 #include "FormatString.hpp"
 #include "GeneralHelpers.h"
 
-#include "DiffusionSimulator.h"
-#include "MatrixUtils.hpp"
+#include "ReindeerLib/DiffusionSimulator.h"
+#include "ReindeerLib/MatrixUtils.hpp"
 
 namespace
 {

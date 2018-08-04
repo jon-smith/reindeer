@@ -13,6 +13,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ObeliskCore_External", "Obe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppLibTests", "CppLibTests\CppLibTests.vcxproj", "{AD5C0143-EFAE-44AA-B903-B5B21E1D476F}"
 	ProjectSection(ProjectDependencies) = postProject
+		{E3273E12-498A-4443-8FD7-04030C438E0F} = {E3273E12-498A-4443-8FD7-04030C438E0F}
 		{8F7721BD-6377-4CA1-81B2-9F90C9D8453F} = {8F7721BD-6377-4CA1-81B2-9F90C9D8453F}
 	EndProjectSection
 EndProject
@@ -22,6 +23,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kudah", "Kudah\Kudah.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KudahLib", "KudahLib\KudahLib.vcxproj", "{93268327-A69D-4D82-BB4B-38D0721B8554}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReindeerLib", "ReindeerLib\ReindeerLib.vcxproj", "{E3273E12-498A-4443-8FD7-04030C438E0F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8F7721BD-6377-4CA1-81B2-9F90C9D8453F} = {8F7721BD-6377-4CA1-81B2-9F90C9D8453F}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		ObeliskCore_External\ObeliskCore_External.vcxitems*{45d41acc-2c3c-43d2-bc10-02aa73ffc7c7}*SharedItemsImports = 9
@@ -29,6 +35,7 @@ Global
 		ObeliskCore_External\ObeliskCore_External.vcxitems*{93268327-a69d-4d82-bb4b-38d0721b8554}*SharedItemsImports = 4
 		ObeliskCore_External\ObeliskCore_External.vcxitems*{ad5c0143-efae-44aa-b903-b5b21e1d476f}*SharedItemsImports = 4
 		ObeliskCore_External\ObeliskCore_External.vcxitems*{b12702ad-abfb-343a-a199-8e24837244a3}*SharedItemsImports = 4
+		ObeliskCore_External\ObeliskCore_External.vcxitems*{e3273e12-498a-4443-8fd7-04030c438e0f}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +94,16 @@ Global
 		{93268327-A69D-4D82-BB4B-38D0721B8554}.Release|x64.ActiveCfg = Release|x64
 		{93268327-A69D-4D82-BB4B-38D0721B8554}.Release|x64.Build.0 = Release|x64
 		{93268327-A69D-4D82-BB4B-38D0721B8554}.Release|x86.ActiveCfg = Release|x64
+		{E3273E12-498A-4443-8FD7-04030C438E0F}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{E3273E12-498A-4443-8FD7-04030C438E0F}.Debug|x64.ActiveCfg = Debug|x64
+		{E3273E12-498A-4443-8FD7-04030C438E0F}.Debug|x64.Build.0 = Debug|x64
+		{E3273E12-498A-4443-8FD7-04030C438E0F}.Debug|x86.ActiveCfg = Debug|Win32
+		{E3273E12-498A-4443-8FD7-04030C438E0F}.Debug|x86.Build.0 = Debug|Win32
+		{E3273E12-498A-4443-8FD7-04030C438E0F}.Release|Any CPU.ActiveCfg = Release|Win32
+		{E3273E12-498A-4443-8FD7-04030C438E0F}.Release|x64.ActiveCfg = Release|x64
+		{E3273E12-498A-4443-8FD7-04030C438E0F}.Release|x64.Build.0 = Release|x64
+		{E3273E12-498A-4443-8FD7-04030C438E0F}.Release|x86.ActiveCfg = Release|Win32
+		{E3273E12-498A-4443-8FD7-04030C438E0F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -37,12 +37,6 @@
       <UniqueIdentifier>{3ae26b60-324d-49c2-8979-086046481d98}</UniqueIdentifier>
       <Extensions>cpp;cxx;c;def;h;hpp</Extensions>
     </Filter>
-    <Filter Include="Codes">
-      <UniqueIdentifier>{b7f9a9d4-53df-40ee-96c2-56eb838e411d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils">
-      <UniqueIdentifier>{13042dbc-bf91-46ef-8ac7-620f5bff5219}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UI_Generic">
       <UniqueIdentifier>{7e46b12a-be73-416f-9312-f8ebd563d9ce}</UniqueIdentifier>
     </Filter>
@@ -74,9 +68,6 @@
     </ClCompile>
     <ClCompile Include="QtPointRenderView.cpp">
       <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="DiffusionSimulator.cpp">
-      <Filter>Codes</Filter>
     </ClCompile>
     <ClCompile Include="QtBaseOpenGLView.cpp">
       <Filter>UI_Generic</Filter>
@@ -110,15 +101,6 @@
     <ClInclude Include="QtPointRenderView.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="MatrixUtils.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="XYZ.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="DiffusionSimulator.h">
-      <Filter>Codes</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="reindeer.ui">
@@ -148,5 +130,6 @@
   <ItemGroup>
     <None Include="windeployqt_debug.bat" />
     <None Include="windeployqt_release.bat" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

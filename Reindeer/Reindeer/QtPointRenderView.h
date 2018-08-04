@@ -5,7 +5,7 @@
 #include <array>
 #include <chrono>
 
-#include "XYZ.hpp"
+#include "ReindeerLib/XYZ.hpp"
 
 namespace reindeer
 {
