@@ -12,6 +12,9 @@
     <ClCompile Include="DiffusionSimulator.cpp">
       <Filter>PointSim</Filter>
     </ClCompile>
+    <ClCompile Include="MessageQueue.cpp">
+      <Filter>ZMQ</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DiffusionSimulator.h">
@@ -23,8 +26,8 @@
     <ClInclude Include="XYZ.hpp">
       <Filter>PointSim</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="MessageQueue.h">
+      <Filter>ZMQ</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

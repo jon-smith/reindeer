@@ -130,6 +130,5 @@
   <ItemGroup>
     <None Include="windeployqt_debug.bat" />
     <None Include="windeployqt_release.bat" />
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

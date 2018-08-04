@@ -78,7 +78,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir);$(MSBuildThisFileDirectory);$(SolutionDir)\thirdparty</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -86,8 +86,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>PointGenLib.dll.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\PointGenLib_Rust\target\$(Configuration)\deps\;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PointGenLib.dll.lib; libzmq-v120-mt-3_2_4.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\lib\;$(SolutionDir)\PointGenLib_Rust\target\$(Configuration)\deps\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -102,12 +102,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir);$(MSBuildThisFileDirectory);$(SolutionDir)\thirdparty</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>PointGenLib.dll.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\PointGenLib_Rust\target\$(Configuration)\deps\;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PointGenLib.dll.lib; libzmq-v120-mt-gd-3_2_4.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\lib\;$(SolutionDir)\PointGenLib_Rust\target\$(Configuration)\deps\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,23 +125,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DiffusionSimulator.cpp" />
+    <ClCompile Include="MessageQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DiffusionSimulator.h" />
     <ClInclude Include="MatrixUtils.hpp" />
+    <ClInclude Include="MessageQueue.h" />
     <ClInclude Include="XYZ.hpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\libzmq-vc141.4.2.2\build\native\libzmq-vc141.targets" Condition="Exists('..\packages\libzmq-vc141.4.2.2\build\native\libzmq-vc141.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\libzmq-vc141.4.2.2\build\native\libzmq-vc141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libzmq-vc141.4.2.2\build\native\libzmq-vc141.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
