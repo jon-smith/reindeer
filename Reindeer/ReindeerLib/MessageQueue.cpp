@@ -19,40 +19,90 @@ namespace
 	}
 }
 
-void MessageQueue::test()
+SimpleServer::SimpleServer(const std::string &bindAddress,
+	std::function<std::string(const std::string &)> processMessageReturnReply,
+	std::chrono::milliseconds maxWaitTime) :
+	processMessageReturnReply(processMessageReturnReply),
+	maxWaitTime(maxWaitTime)
 {
-	std::atomic_bool kill{ false };
+	serverTask = std::async(std::launch::async, [this, bindAddress]() {
+		serverThread(bindAddress);
+	});
+}
 
-	auto server = std::async(std::launch::async, [&kill]() {
+SimpleServer::~SimpleServer()
+{
+	kill();
+	serverTask.wait();
+}
 
-		zmq::context_t context{};
-		zmq::socket_t socket(context, ZMQ_REP);
-		socket.bind("tcp://*:5555");
+unsigned SimpleServer::messagesReceived() const
+{
 
-		while (!kill)
+}
+
+unsigned SimpleServer::messagesProcessed() const
+{
+
+}
+
+void SimpleServer::kill()
+{
+	killFlag = true;
+}
+
+void SimpleServer::serverThread(const std::string &bindAddress)
+{
+	zmq::context_t context{};
+	zmq::socket_t socket(context, ZMQ_REP);
+	socket.bind(bindAddress);
+
+	hasConnected = true;
+
+	while (!killFlag)
+	{
+		zmq::message_t request;
+
+		// Poll for requests
+		while (!killFlag)
 		{
-			zmq::message_t request;
-
-			// Wait for the request from the client
-			while (!kill && !socket.recv(&request, ZMQ_DONTWAIT))
-			{				
-				std::this_thread::sleep_for(std::chrono::milliseconds(30));
-			}
-
-			if (!kill)
+			if (socket.recv(&request, ZMQ_DONTWAIT))
 			{
-				log("Received: " + std::string((char*)request.data()));
+				++nMessagesReceived;
+				break;
+			}
+			else
+			{
+				std::this_thread::sleep_for(maxWaitTime);
+			}
+		}
 
-				std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		if (!killFlag)
+		{
+			const auto requestAsStr = std::string(request.str());
+			const auto result = processMessageReturnReply(requestAsStr);
 
-				// Send back
-				const std::string rawMessage("Message");
-				zmq::message_t reply(rawMessage.size());
-				memcpy((void*)reply.data(), rawMessage.data(), rawMessage.size());
+			++nMessagesProcessed;
+
+			if (!result.empty())
+			{
+				zmq::message_t reply(std::begin(result), std::end(result));
 				socket.send(reply);
 			}
 		}
-	});
+	}
+}
+
+void MessageQueue::test()
+{
+	const auto serverFn = [](const std::string &msg)
+	{
+		log("Received: " + msg);
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		return ("Message");
+	};
+
+	SimpleServer server("tcp://*:5555", serverFn, std::chrono::milliseconds(30));	
 
 	auto client = std::async(std::launch::async, []() {
 		zmq::context_t context{};
@@ -77,10 +127,8 @@ void MessageQueue::test()
 	});
 	
 	client.wait();
-	kill = true;
 
-	server.wait();
-
+	server.kill();
 
 	return;
 }
