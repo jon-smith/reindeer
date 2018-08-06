@@ -79,7 +79,7 @@ void SimpleServer::serverThread(const std::string &bindAddress)
 
 		if (!killFlag)
 		{
-			const auto requestAsStr = std::string(request.str());
+			const auto requestAsStr = std::string(static_cast<const char*>(request.data()), request.size());
 			const auto result = processMessageReturnReply(requestAsStr);
 
 			++nMessagesProcessed;
@@ -110,6 +110,8 @@ SimpleClient::SimpleClient(const std::string &connectionAddress) :
 	impl->socket.connect(connectionAddress);
 }
 
+SimpleClient::~SimpleClient() = default;
+
 std::string SimpleClient::sendMessageAndWaitForReply(const std::string &msg)
 {
 	zmq::message_t zMsg(msg.size());
@@ -120,31 +122,4 @@ std::string SimpleClient::sendMessageAndWaitForReply(const std::string &msg)
 	impl->socket.recv(&request);
 
 	return request.str();
-}
-
-void MessageQueue::test()
-{
-	const auto serverFn = [](const std::string &msg)
-	{
-		log("Received: " + msg);
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
-		return ("Message");
-	};
-
-	SimpleServer server("tcp://*:5555", serverFn, std::chrono::milliseconds(30));
-	SimpleClient client("tcp://localhost:5555");
-
-	const std::vector<std::string> toSend = {
-		"one",
-		"two",
-		"three"
-	};
-
-	for (const auto &msg : toSend)
-	{
-		client.sendMessageAndWaitForReply(msg);
-	}	
-	server.kill();
-
-	return;
 }
