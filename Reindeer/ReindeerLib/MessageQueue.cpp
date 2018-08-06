@@ -17,13 +17,18 @@ namespace
 		std::cout << s << "\n";
 		obelisk::platform_utilities::outputDebugString(s);
 	}
+
+	zmq::message_t messageFromString(const std::string &str)
+	{
+		return zmq::message_t(std::begin(str), std::end(str));
+	}
 }
 
 ConsumeReplyServer::ConsumeReplyServer(const std::string &bindAddress,
 	std::function<std::string(const std::string &)> processMessageReturnReply,
-	std::chrono::milliseconds maxWaitTime) :
+	std::chrono::milliseconds pollInterval) :
 	processMessageReturnReply(processMessageReturnReply),
-	maxWaitTime(maxWaitTime)
+	pollInterval(pollInterval)
 {
 	serverTask = std::async(std::launch::async, [this, bindAddress]() {
 		serverThread(bindAddress);
@@ -73,7 +78,7 @@ void ConsumeReplyServer::serverThread(const std::string &bindAddress)
 			}
 			else
 			{
-				std::this_thread::sleep_for(maxWaitTime);
+				std::this_thread::sleep_for(pollInterval);
 			}
 		}
 
@@ -84,8 +89,7 @@ void ConsumeReplyServer::serverThread(const std::string &bindAddress)
 
 			++nMessagesProcessed;
 
-			zmq::message_t reply(std::begin(result), std::end(result));
-			socket.send(reply);
+			socket.send(messageFromString(result));
 		}
 	}
 }
@@ -111,12 +115,83 @@ RequestClient::~RequestClient() = default;
 
 std::string RequestClient::sendMessageAndWaitForReply(const std::string &msg)
 {
-	zmq::message_t zMsg(msg.size());
-	memcpy((void*)zMsg.data(), msg.data(), msg.size());
-	impl->socket.send(zMsg);
+	impl->socket.send(messageFromString(msg));
 
 	zmq::message_t request;
 	impl->socket.recv(&request);
 
 	return std::string(static_cast<const char*>(request.data()), request.size());
+}
+
+struct PublishServer::Impl
+{
+	Impl() : socket(context, ZMQ_PUB)
+	{
+
+	}
+
+	zmq::context_t context{};
+	zmq::socket_t socket;
+};
+
+PublishServer::PublishServer(const std::string &bindAddress) :
+	impl(std::make_unique<Impl>())
+{
+	impl->socket.bind(bindAddress);
+}
+
+PublishServer::~PublishServer() = default;
+
+void PublishServer::publish(const std::string &message)
+{
+	impl->socket.send(messageFromString(message));
+}
+
+SubscriberClient::SubscriberClient(const std::string &connectionAddress,
+	std::function<void(const std::string &)> processMessage,
+	std::chrono::milliseconds pollInterval) :
+	processMessage(processMessage),
+	pollInterval(pollInterval)
+{
+	threadTask = std::async(std::launch::async, [this, connectionAddress]() {
+		threadFunction(connectionAddress);
+	});
+}
+
+SubscriberClient::~SubscriberClient()
+{
+	kill();
+}
+
+void SubscriberClient::kill()
+{
+	killFlag = true;
+	threadTask.wait();
+}
+
+void SubscriberClient::threadFunction(const std::string &connectionAddress)
+{
+	zmq::context_t context{};
+	zmq::socket_t socket(context, ZMQ_SUB);
+	socket.connect(connectionAddress);
+
+	hasConnected = true;
+
+	while (!killFlag)
+	{
+		zmq::message_t receivedMessage;
+
+		// Poll for messages
+		while (!killFlag)
+		{
+			if (socket.recv(&receivedMessage, ZMQ_DONTWAIT))
+			{
+				const auto messageAsString = std::string(static_cast<const char*>(receivedMessage.data()), receivedMessage.size());
+				processMessage(messageAsString);
+				break;
+			}
+
+			std::this_thread::sleep_for(pollInterval);
+		}
+	}
 }
