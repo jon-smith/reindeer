@@ -22,6 +22,32 @@ namespace
 	{
 		return zmq::message_t(std::begin(str), std::end(str));
 	}
+
+	enum class SocketConnectionType
+	{
+		BIND, CONNECT
+	};
+
+	template <int SocketType, SocketConnectionType ConnectionType>
+	struct ContextSocket
+	{
+		ContextSocket(const std::string &address) : 
+			socket(context, SocketType)
+		{
+			if constexpr (ConnectionType == SocketConnectionType::BIND)
+				socket.bind(address);
+			else if constexpr (ConnectionType == SocketConnectionType::CONNECT)
+				socket.connect(address);
+			else
+				static_assert(false);
+		}
+
+	private:
+		zmq::context_t context{};
+	public:
+		// Socket is below context to ensure correct order of initialisation
+		zmq::socket_t socket;
+	};
 }
 
 ConsumeReplyServer::ConsumeReplyServer(const std::string &bindAddress,
@@ -58,9 +84,7 @@ void ConsumeReplyServer::kill()
 
 void ConsumeReplyServer::serverThread(const std::string &bindAddress)
 {
-	zmq::context_t context{};
-	zmq::socket_t socket(context, ZMQ_REP);
-	socket.bind(bindAddress);
+	ContextSocket<ZMQ_REP, SocketConnectionType::BIND> context(bindAddress);
 
 	hasConnected = true;
 
@@ -71,7 +95,7 @@ void ConsumeReplyServer::serverThread(const std::string &bindAddress)
 		// Poll for requests
 		while (!killFlag)
 		{
-			if (socket.recv(&request, ZMQ_DONTWAIT))
+			if (context.socket.recv(&request, ZMQ_DONTWAIT))
 			{
 				++nMessagesReceived;
 				break;
@@ -89,26 +113,19 @@ void ConsumeReplyServer::serverThread(const std::string &bindAddress)
 
 			++nMessagesProcessed;
 
-			socket.send(messageFromString(result));
+			context.socket.send(messageFromString(result));
 		}
 	}
 }
 
-struct RequestClient::Impl
+struct RequestClient::Impl : public ContextSocket<ZMQ_REQ, SocketConnectionType::CONNECT>
 {
-	Impl() : socket(context, ZMQ_REQ)
-	{
-
-	}
-
-	zmq::context_t context{};
-	zmq::socket_t socket;
+	using ContextSocket::ContextSocket;
 };
 
 RequestClient::RequestClient(const std::string &connectionAddress) :
-	impl(std::make_unique<Impl>())
+	impl(std::make_unique<Impl>(connectionAddress))
 {
-	impl->socket.connect(connectionAddress);
 }
 
 RequestClient::~RequestClient() = default;
@@ -123,21 +140,14 @@ std::string RequestClient::sendMessageAndWaitForReply(const std::string &msg)
 	return std::string(static_cast<const char*>(request.data()), request.size());
 }
 
-struct PublishServer::Impl
+struct PublishServer::Impl : public ContextSocket<ZMQ_PUB, SocketConnectionType::BIND>
 {
-	Impl() : socket(context, ZMQ_PUB)
-	{
-
-	}
-
-	zmq::context_t context{};
-	zmq::socket_t socket;
+	using ContextSocket::ContextSocket;
 };
 
 PublishServer::PublishServer(const std::string &bindAddress) :
-	impl(std::make_unique<Impl>())
+	impl(std::make_unique<Impl>(bindAddress))
 {
-	impl->socket.bind(bindAddress);
 }
 
 PublishServer::~PublishServer() = default;
@@ -171,9 +181,7 @@ void SubscriberClient::kill()
 
 void SubscriberClient::threadFunction(const std::string &connectionAddress)
 {
-	zmq::context_t context{};
-	zmq::socket_t socket(context, ZMQ_SUB);
-	socket.connect(connectionAddress);
+	ContextSocket<ZMQ_SUB, SocketConnectionType::CONNECT> subscriber(connectionAddress);
 
 	hasConnected = true;
 
@@ -184,7 +192,7 @@ void SubscriberClient::threadFunction(const std::string &connectionAddress)
 		// Poll for messages
 		while (!killFlag)
 		{
-			if (socket.recv(&receivedMessage, ZMQ_DONTWAIT))
+			if (subscriber.socket.recv(&receivedMessage, ZMQ_DONTWAIT))
 			{
 				const auto messageAsString = std::string(static_cast<const char*>(receivedMessage.data()), receivedMessage.size());
 				processMessage(messageAsString);
