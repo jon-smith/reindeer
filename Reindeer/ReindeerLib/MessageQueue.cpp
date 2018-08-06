@@ -19,7 +19,7 @@ namespace
 	}
 }
 
-SimpleServer::SimpleServer(const std::string &bindAddress,
+ConsumeReplyServer::ConsumeReplyServer(const std::string &bindAddress,
 	std::function<std::string(const std::string &)> processMessageReturnReply,
 	std::chrono::milliseconds maxWaitTime) :
 	processMessageReturnReply(processMessageReturnReply),
@@ -30,28 +30,28 @@ SimpleServer::SimpleServer(const std::string &bindAddress,
 	});
 }
 
-SimpleServer::~SimpleServer()
+ConsumeReplyServer::~ConsumeReplyServer()
 {
 	kill();
 	serverTask.wait();
 }
 
-unsigned SimpleServer::messagesReceived() const
+unsigned ConsumeReplyServer::messagesReceived() const
 {
 	return nMessagesReceived;
 }
 
-unsigned SimpleServer::messagesProcessed() const
+unsigned ConsumeReplyServer::messagesProcessed() const
 {
 	return nMessagesProcessed;
 }
 
-void SimpleServer::kill()
+void ConsumeReplyServer::kill()
 {
 	killFlag = true;
 }
 
-void SimpleServer::serverThread(const std::string &bindAddress)
+void ConsumeReplyServer::serverThread(const std::string &bindAddress)
 {
 	zmq::context_t context{};
 	zmq::socket_t socket(context, ZMQ_REP);
@@ -90,7 +90,7 @@ void SimpleServer::serverThread(const std::string &bindAddress)
 	}
 }
 
-struct SimpleClient::Impl
+struct RequestClient::Impl
 {
 	Impl() : socket(context, ZMQ_REQ)
 	{
@@ -101,15 +101,15 @@ struct SimpleClient::Impl
 	zmq::socket_t socket;
 };
 
-SimpleClient::SimpleClient(const std::string &connectionAddress) :
+RequestClient::RequestClient(const std::string &connectionAddress) :
 	impl(std::make_unique<Impl>())
 {
 	impl->socket.connect(connectionAddress);
 }
 
-SimpleClient::~SimpleClient() = default;
+RequestClient::~RequestClient() = default;
 
-std::string SimpleClient::sendMessageAndWaitForReply(const std::string &msg)
+std::string RequestClient::sendMessageAndWaitForReply(const std::string &msg)
 {
 	zmq::message_t zMsg(msg.size());
 	memcpy((void*)zMsg.data(), msg.data(), msg.size());

@@ -5,14 +5,14 @@
 
 namespace reindeer
 {
-	class SimpleServer
+	class ConsumeReplyServer
 	{
 	public:
-		SimpleServer(const std::string &bindAddress,
+		ConsumeReplyServer(const std::string &bindAddress,
 			std::function<std::string(const std::string &)> processMessageReturnReply,
 			std::chrono::milliseconds maxWaitTime);
 
-		~SimpleServer();
+		~ConsumeReplyServer();
 
 		unsigned messagesReceived() const;
 		unsigned messagesProcessed() const;
@@ -33,11 +33,11 @@ namespace reindeer
 		std::atomic_bool killFlag{ false };
 	};
 
-	class SimpleClient
+	class RequestClient
 	{
 	public:
-		SimpleClient(const std::string &connectionAddress);
-		~SimpleClient();
+		RequestClient(const std::string &connectionAddress);
+		~RequestClient();
 
 		std::string sendMessageAndWaitForReply(const std::string &msg);
 

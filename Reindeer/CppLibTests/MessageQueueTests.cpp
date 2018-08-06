@@ -17,16 +17,16 @@ namespace CppLibTests
 
 	public:
 
-		TEST_METHOD(ServerInitState)
+		TEST_METHOD(ConsumeReplyServerInitState)
 		{
-			SimpleServer server(serverAddress, {}, std::chrono::milliseconds(30));
+			ConsumeReplyServer server(serverAddress, {}, std::chrono::milliseconds(30));
 			Assert::IsTrue(server.messagesProcessed() == 0, L"Initial message processed count non-zero");
 			Assert::IsTrue(server.messagesReceived() == 0, L"Initial message received count non-zero");
 		}
 
-		TEST_METHOD(ClientSmokeTest)
+		TEST_METHOD(RequestClientSmokeTest)
 		{
-			SimpleClient client(clientAddress);
+			RequestClient client(clientAddress);
 		}
 
 		TEST_METHOD(ServerClientCommEmptyReplies)
@@ -36,8 +36,8 @@ namespace CppLibTests
 				return std::string{};
 			};
 
-			SimpleServer server(serverAddress, serverFn, std::chrono::milliseconds(30));
-			SimpleClient client(clientAddress);
+			ConsumeReplyServer server(serverAddress, serverFn, std::chrono::milliseconds(30));
+			RequestClient client(clientAddress);
 
 			const auto reply = client.sendMessageAndWaitForReply("Message");
 
@@ -55,8 +55,8 @@ namespace CppLibTests
 				return std::string(rbegin(msg), rend(msg));
 			};
 
-			SimpleServer server(serverAddress, serverFn, std::chrono::milliseconds(30));
-			SimpleClient client(clientAddress);
+			ConsumeReplyServer server(serverAddress, serverFn, std::chrono::milliseconds(30));
+			RequestClient client(clientAddress);
 
 			const auto message = "Message";
 			const auto reply = client.sendMessageAndWaitForReply("Message");
@@ -76,8 +76,8 @@ namespace CppLibTests
 				return ("Message");
 			};
 
-			SimpleServer server(serverAddress, serverFn, std::chrono::milliseconds(30));
-			SimpleClient client(clientAddress);
+			ConsumeReplyServer server(serverAddress, serverFn, std::chrono::milliseconds(30));
+			RequestClient client(clientAddress);
 
 			const std::vector<std::string> toSend = {
 				"one",
