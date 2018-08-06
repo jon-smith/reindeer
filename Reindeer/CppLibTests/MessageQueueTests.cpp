@@ -3,6 +3,7 @@
 
 #include "ReindeerLib\MessageQueue.h"
 #include "FormatString.hpp"
+#include "StdLockUtilsT.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -90,6 +91,38 @@ namespace CppLibTests
 				client.sendMessageAndWaitForReply(msg);
 			}
 			server.kill();
+		}
+
+		TEST_METHOD(PublisherSubscribeTest)
+		{
+			std::vector<std::string> received;
+			std::mutex m;
+
+			const auto messageFn = [&received, &m](const std::string &msg)
+			{
+				obelisk::lockAndCall(m, [&received, &msg]() {
+					received.push_back(msg);
+				});
+
+				Logger::WriteMessage(std::string("Received: " + msg).c_str());
+				std::this_thread::sleep_for(std::chrono::milliseconds(30));
+			};
+
+			PublishServer server(serverAddress);
+			SubscriberClient client(clientAddress, messageFn, std::chrono::milliseconds(30));
+
+			while (true)
+			{
+				if (obelisk::lockCallAndReturn(m, [&received]() {
+					return received.size() > 3;
+				}))
+				{
+					break;
+				}
+				std::this_thread::sleep_for(std::chrono::milliseconds(30));
+
+				server.publish("Message");
+			}
 		}
 	};
 }

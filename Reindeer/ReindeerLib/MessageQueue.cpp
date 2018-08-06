@@ -183,6 +183,9 @@ void SubscriberClient::threadFunction(const std::string &connectionAddress)
 {
 	ContextSocket<ZMQ_SUB, SocketConnectionType::CONNECT> subscriber(connectionAddress);
 
+	// Subscribe to all messages
+	subscriber.socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+
 	hasConnected = true;
 
 	while (!killFlag)
