@@ -93,6 +93,35 @@ void SimpleServer::serverThread(const std::string &bindAddress)
 	}
 }
 
+struct SimpleClient::Impl
+{
+	Impl() : socket(context, ZMQ_REQ)
+	{
+
+	}
+
+	zmq::context_t context{};
+	zmq::socket_t socket;
+};
+
+SimpleClient::SimpleClient(const std::string &connectionAddress) :
+	impl(std::make_unique<Impl>())
+{
+	impl->socket.connect(connectionAddress);
+}
+
+std::string SimpleClient::sendMessageAndWaitForReply(const std::string &msg)
+{
+	zmq::message_t zMsg(msg.size());
+	memcpy((void*)zMsg.data(), msg.data(), msg.size());
+	impl->socket.send(zMsg);
+
+	zmq::message_t request;
+	impl->socket.recv(&request);
+
+	return request.str();
+}
+
 void MessageQueue::test()
 {
 	const auto serverFn = [](const std::string &msg)
@@ -102,32 +131,19 @@ void MessageQueue::test()
 		return ("Message");
 	};
 
-	SimpleServer server("tcp://*:5555", serverFn, std::chrono::milliseconds(30));	
+	SimpleServer server("tcp://*:5555", serverFn, std::chrono::milliseconds(30));
+	SimpleClient client("tcp://localhost:5555");
 
-	auto client = std::async(std::launch::async, []() {
-		zmq::context_t context{};
-		zmq::socket_t socket(context, ZMQ_REQ);
-		socket.connect("tcp://localhost:5555");
+	const std::vector<std::string> toSend = {
+		"one",
+		"two",
+		"three"
+	};
 
-		const std::vector<std::string> toSend = {
-			"one",
-			"two",
-			"three"
-		};
-
-		for (const auto &msg : toSend)
-		{
-			zmq::message_t zMsg(msg.size());
-			memcpy((void*)zMsg.data(), msg.data(), msg.size());
-			socket.send(zMsg);
-
-			zmq::message_t request;
-			socket.recv(&request);
-		}
-	});
-	
-	client.wait();
-
+	for (const auto &msg : toSend)
+	{
+		client.sendMessageAndWaitForReply(msg);
+	}	
 	server.kill();
 
 	return;

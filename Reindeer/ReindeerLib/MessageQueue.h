@@ -35,7 +35,14 @@ namespace reindeer
 
 	class SimpleClient
 	{
+	public:
+		SimpleClient(const std::string &connectionAddress);
 
+		std::string sendMessageAndWaitForReply(const std::string &msg);
+
+	private:
+		struct Impl;
+		const std::unique_ptr<Impl> impl;
 	};
 
 	class MessageQueue
