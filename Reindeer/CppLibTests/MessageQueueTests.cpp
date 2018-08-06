@@ -17,9 +17,11 @@ namespace CppLibTests
 
 	public:
 
-		TEST_METHOD(ServerSmokeTest)
+		TEST_METHOD(ServerInitState)
 		{
 			SimpleServer server(serverAddress, {}, std::chrono::milliseconds(30));
+			Assert::IsTrue(server.messagesProcessed() == 0, L"Initial message processed count non-zero");
+			Assert::IsTrue(server.messagesReceived() == 0, L"Initial message received count non-zero");
 		}
 
 		TEST_METHOD(ClientSmokeTest)
@@ -27,12 +29,50 @@ namespace CppLibTests
 			SimpleClient client(clientAddress);
 		}
 
-		TEST_METHOD(MessageQueueSmokeTest)
+		TEST_METHOD(ServerClientCommEmptyReplies)
+		{
+			const auto serverFn = [](const std::string &msg)
+			{
+				return std::string{};
+			};
+
+			SimpleServer server(serverAddress, serverFn, std::chrono::milliseconds(30));
+			SimpleClient client(clientAddress);
+
+			const auto reply = client.sendMessageAndWaitForReply("Message");
+
+			Assert::IsTrue(reply.empty(), L"Reply is not empty");
+
+			Assert::IsTrue(server.messagesProcessed() == 1, L"Message processed count incorrect");
+			Assert::IsTrue(server.messagesReceived() == 1, L"Message received count incorrect");
+		}
+
+		TEST_METHOD(ServerClientCommWithReplies)
+		{
+			// Simple reverse function
+			const auto serverFn = [](const std::string &msg)
+			{
+				return std::string(rbegin(msg), rend(msg));
+			};
+
+			SimpleServer server(serverAddress, serverFn, std::chrono::milliseconds(30));
+			SimpleClient client(clientAddress);
+
+			const auto message = "Message";
+			const auto reply = client.sendMessageAndWaitForReply("Message");
+
+			Assert::AreEqual(reply, serverFn(message), L"Reply is not as expected");
+
+			Assert::IsTrue(server.messagesProcessed() == 1, L"Message processed count incorrect");
+			Assert::IsTrue(server.messagesReceived() == 1, L"Message received count incorrect");
+		}
+
+		TEST_METHOD(ServerClientCommWithLogOutput)
 		{
 			const auto serverFn = [](const std::string &msg)
 			{
 				Logger::WriteMessage(std::string("Received: " + msg).c_str());
-				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				return ("Message");
 			};
 

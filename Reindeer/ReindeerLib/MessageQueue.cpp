@@ -38,12 +38,12 @@ SimpleServer::~SimpleServer()
 
 unsigned SimpleServer::messagesReceived() const
 {
-
+	return nMessagesReceived;
 }
 
 unsigned SimpleServer::messagesProcessed() const
 {
-
+	return nMessagesProcessed;
 }
 
 void SimpleServer::kill()
@@ -84,11 +84,8 @@ void SimpleServer::serverThread(const std::string &bindAddress)
 
 			++nMessagesProcessed;
 
-			if (!result.empty())
-			{
-				zmq::message_t reply(std::begin(result), std::end(result));
-				socket.send(reply);
-			}
+			zmq::message_t reply(std::begin(result), std::end(result));
+			socket.send(reply);
 		}
 	}
 }
@@ -121,5 +118,5 @@ std::string SimpleClient::sendMessageAndWaitForReply(const std::string &msg)
 	zmq::message_t request;
 	impl->socket.recv(&request);
 
-	return request.str();
+	return std::string(static_cast<const char*>(request.data()), request.size());
 }
