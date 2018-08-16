@@ -81,4 +81,47 @@ namespace reindeer
 		std::atomic_bool hasConnected{ false };
 		std::atomic_bool killFlag{ false };
 	};
+
+	// Use RequestWorker to define worker task
+	// RequestClients can send a string request and will receive a reply when started with the id of the worker
+	class LoadBalancingBroker
+	{
+	public:
+		LoadBalancingBroker(const std::string &clientAddress,
+			const std::string &serverAddress);
+
+		~LoadBalancingBroker();
+
+	private:
+
+		void threadFunction(const std::string &clientAddress,
+			const std::string &serverAddress);
+
+		std::atomic_bool killFlag{ false };
+		std::future<void> threadTask;
+	};
+
+	// Worker class to use with LoadBalancingBroker
+	class RequestWorker
+	{
+	public:
+		RequestWorker(const std::string &connectAddress,
+			std::function<void(const std::string &)> processRequest,
+			std::chrono::milliseconds pollInterval);
+
+		~RequestWorker();
+
+		void kill();
+
+	private:
+
+		void serverThread(const std::string &connectAddress);
+
+		std::future<void> serverTask;
+		const std::function<void(const std::string &)> processRequest;
+		const std::chrono::milliseconds pollInterval;
+
+		std::atomic_bool hasConnected{ false };
+		std::atomic_bool killFlag{ false };
+	};
 }

@@ -1,5 +1,6 @@
 #include "MessageQueue.h"
 
+#define NOMINMAX
 #include "zmq\zmq.hpp"
 
 #include "PlatformSpecific.h"
@@ -7,6 +8,8 @@
 #include <atomic>
 #include <future>
 #include <iostream>
+#include <deque>
+#include <random>
 
 using namespace reindeer;
 
@@ -23,6 +26,24 @@ namespace
 		return zmq::message_t(std::begin(str), std::end(str));
 	}
 
+	std::string msgDataAsString(const zmq::message_t &msg)
+	{
+		return std::string(static_cast<const char*>(msg.data()), msg.size());
+	}
+
+	void setRandomSocketID(zmq::socket_t &socket)
+	{
+		unsigned char id[16];
+		id[0] = 255;
+		std::mt19937 gen(std::random_device{}());
+		for (int i = 1; i < 15; ++i)
+		{
+			id[i] = std::max<unsigned char>(static_cast<unsigned char>(gen()), 1);
+		}
+		id[15] = '\0';
+		socket.setsockopt(ZMQ_IDENTITY, id, 16);
+	}
+
 	enum class SocketConnectionType
 	{
 		BIND, CONNECT
@@ -31,9 +52,11 @@ namespace
 	template <int SocketType, SocketConnectionType ConnectionType>
 	struct ContextSocket
 	{
-		ContextSocket(const std::string &address) : 
+		ContextSocket(const std::string &address) :
 			socket(context, SocketType)
 		{
+			setRandomSocketID(socket);
+
 			if constexpr (ConnectionType == SocketConnectionType::BIND)
 				socket.bind(address);
 			else if constexpr (ConnectionType == SocketConnectionType::CONNECT)
@@ -108,7 +131,7 @@ void ConsumeReplyServer::serverThread(const std::string &bindAddress)
 
 		if (!killFlag)
 		{
-			const auto requestAsStr = std::string(static_cast<const char*>(request.data()), request.size());
+			const auto requestAsStr = msgDataAsString(request);
 			const auto result = processMessageReturnReply(requestAsStr);
 
 			++nMessagesProcessed;
@@ -137,7 +160,7 @@ std::string RequestClient::sendMessageAndWaitForReply(const std::string &msg)
 	zmq::message_t request;
 	impl->socket.recv(&request);
 
-	return std::string(static_cast<const char*>(request.data()), request.size());
+	return msgDataAsString(request);
 }
 
 struct PublishServer::Impl : public ContextSocket<ZMQ_PUB, SocketConnectionType::BIND>
@@ -197,12 +220,165 @@ void SubscriberClient::threadFunction(const std::string &connectionAddress)
 		{
 			if (subscriber.socket.recv(&receivedMessage, ZMQ_DONTWAIT))
 			{
-				const auto messageAsString = std::string(static_cast<const char*>(receivedMessage.data()), receivedMessage.size());
+				const auto messageAsString = msgDataAsString(receivedMessage);
 				processMessage(messageAsString);
 				break;
 			}
 
 			std::this_thread::sleep_for(pollInterval);
+		}
+	}
+}
+
+LoadBalancingBroker::LoadBalancingBroker(const std::string &clientAddress,
+	const std::string &serverAddress)
+{
+	threadTask = std::async(std::launch::async, [this, clientAddress, serverAddress]() {
+		threadFunction(clientAddress, serverAddress);
+	});
+}
+
+LoadBalancingBroker::~LoadBalancingBroker()
+{
+	killFlag = true;
+	threadTask.wait();
+}
+
+void LoadBalancingBroker::threadFunction(const std::string &clientAddress,
+	const std::string &serverAddress)
+{
+	zmq::context_t context{};
+
+	zmq::socket_t clientSocket(context, ZMQ_ROUTER);
+	zmq::socket_t serverSocket(context, ZMQ_ROUTER);
+
+	clientSocket.bind(clientAddress);
+	serverSocket.bind(serverAddress);
+
+	const auto serverPollItemPrototype = zmq::pollitem_t{ serverSocket, 0, ZMQ_POLLIN, 0 };
+	const auto clientPollItemPrototype = zmq::pollitem_t{ clientSocket, 0, ZMQ_POLLIN, 0 };
+
+	std::deque<std::string> availableWorkerIds;
+	while (!killFlag)
+	{
+		// Poll for messages from clients and servers(workers)
+		// If we don't have available workers, don't poll the clients
+		std::vector<zmq::pollitem_t> pollItems = { serverPollItemPrototype };
+		if (!availableWorkerIds.empty())
+			pollItems.push_back(clientPollItemPrototype);
+
+		// Poll, with an abitrary timeout (so we can kill)
+		const auto pollRV = zmq::poll(pollItems, std::chrono::milliseconds(30));
+		if (pollRV == -1)
+			continue;
+
+		if (pollItems[0].revents & ZMQ_POLLIN)
+		{
+			zmq::message_t workerID;
+			if (serverSocket.recv(&workerID))
+			{
+				// The worker will always send two extra blank messages
+				zmq::message_t empty;
+				serverSocket.recv(&empty);
+				serverSocket.recv(&empty);
+
+				// We have a new worker ready
+				availableWorkerIds.push_back(msgDataAsString(workerID));
+			}
+		}
+
+		if (pollItems.size() > 1)
+		{
+			if (pollItems[1].revents & ZMQ_POLLIN)
+			{
+				// We should receive three messages - the ID, blank and the actual request
+				zmq::message_t clientID;
+				zmq::message_t empty;
+				zmq::message_t clientRequest;
+
+				if (clientSocket.recv(&clientID) &&
+					clientSocket.recv(&empty) &&
+					clientSocket.recv(&clientRequest))
+				{
+					const auto workerToUse = availableWorkerIds.front();
+					availableWorkerIds.pop_front();
+
+					const auto clientIDString = msgDataAsString(clientID);
+
+					// Send the request to the worker
+					const auto sendSuccess =
+						// WorkerID + "" is necessary to get to the right worker
+						serverSocket.send(messageFromString(workerToUse), ZMQ_SNDMORE) &&
+						serverSocket.send(messageFromString(""), ZMQ_SNDMORE) &&
+						// We then send the client ID and the request, as the RequestWorker expects
+						serverSocket.send(messageFromString(clientIDString), ZMQ_SNDMORE) &&
+						serverSocket.send(clientRequest);
+
+					// Start by sending back the clientID and blank for the router to send to the correct place
+					clientSocket.send(messageFromString(clientIDString), ZMQ_SNDMORE);
+					clientSocket.send(messageFromString(""), ZMQ_SNDMORE);
+					// Then send the client id to be used (blank if it failed)
+					clientSocket.send(messageFromString(sendSuccess ? workerToUse : ""));
+				}
+			}
+		}
+	}
+}
+
+RequestWorker::RequestWorker(const std::string &bindAddress,
+	std::function<void(const std::string &)> processRequest,
+	std::chrono::milliseconds pollInterval) :
+	processRequest(processRequest),
+	pollInterval(pollInterval)
+{
+	serverTask = std::async(std::launch::async, [this, bindAddress]() {
+		serverThread(bindAddress);
+	});
+}
+
+RequestWorker::~RequestWorker()
+{
+	kill();
+	serverTask.wait();
+}
+
+void RequestWorker::kill()
+{
+	killFlag = true;
+}
+
+void RequestWorker::serverThread(const std::string &connectAddress)
+{
+	ContextSocket<ZMQ_REQ, SocketConnectionType::CONNECT> context(connectAddress);
+
+	hasConnected = true;	
+
+	while (!killFlag)
+	{
+		// Send a message to say we're ready
+		context.socket.send(messageFromString(""));
+
+		zmq::message_t clientID;
+		zmq::message_t request;
+
+		// Poll for requests
+		while (!killFlag)
+		{
+			if (context.socket.recv(&clientID, ZMQ_DONTWAIT))
+			{
+				context.socket.recv(&request);
+				break;
+			}
+			else
+			{
+				std::this_thread::sleep_for(pollInterval);
+			}
+		}
+
+		if (!killFlag)
+		{
+			const auto requestAsStr = msgDataAsString(request);
+			processRequest(requestAsStr);
 		}
 	}
 }

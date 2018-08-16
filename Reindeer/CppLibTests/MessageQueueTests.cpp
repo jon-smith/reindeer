@@ -4,6 +4,7 @@
 #include "ReindeerLib\MessageQueue.h"
 #include "FormatString.hpp"
 #include "StdLockUtilsT.h"
+#include "ContainerMaker.hpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -15,6 +16,9 @@ namespace CppLibTests
 	{
 		const std::string serverAddress = "tcp://*:5555";
 		const std::string clientAddress = "tcp://localhost:5555";
+
+		const std::string serverAddress2 = "tcp://*:5556";
+		const std::string clientAddress2 = "tcp://localhost:5556";
 
 	public:
 
@@ -123,6 +127,52 @@ namespace CppLibTests
 
 				server.publish("Message");
 			}
+		}
+
+		TEST_METHOD(LoadBalancer)
+		{
+			LoadBalancingBroker broker(serverAddress, serverAddress2);
+
+			constexpr auto N_CLIENTS = 3;
+			constexpr auto N_WORKERS = 2;
+			constexpr auto N_REQ_PER_CLIENT = 5;
+
+			auto clients = obelisk::generateVector<std::unique_ptr<RequestClient>>(
+				[this](size_t i) {
+				return std::make_unique<RequestClient>(clientAddress);
+			}, 0, N_CLIENTS);
+
+			std::atomic<unsigned> workCount(0);
+			const auto poll = std::chrono::milliseconds(2);
+			const auto workerFunc = [&workCount](const std::string &msg)
+			{
+				Logger::WriteMessage(std::string("Received: " + msg).c_str());
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				++workCount;
+			};
+
+			auto workers = obelisk::generateVector<std::unique_ptr<RequestWorker>>(
+				[this, workerFunc, poll](size_t i) {
+				return std::make_unique<RequestWorker>(clientAddress2, workerFunc, poll);
+			}, 0, N_WORKERS);
+
+			
+			for (size_t i = 0; i < N_REQ_PER_CLIENT; ++i)
+			{
+				for (auto &client : clients)
+				{
+					const auto reply = client->sendMessageAndWaitForReply("Running request index " + std::to_string(i));
+					Logger::WriteMessage(std::string("Client received: " + reply).c_str());
+				}
+			}
+
+			// Let it have its time
+			while (workCount < N_REQ_PER_CLIENT*N_CLIENTS)
+			{
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+
+			Assert::IsTrue(workCount == N_REQ_PER_CLIENT*N_CLIENTS);
 		}
 	};
 }
