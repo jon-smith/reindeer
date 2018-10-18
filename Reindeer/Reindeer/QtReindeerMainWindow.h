@@ -19,10 +19,19 @@ public:
   ~QtReindeerMainWindow();
 
 private:
+	void timerEvent(QTimerEvent *event) override;
+	void doNextLoopView();
   void onResetButton();
 	void onCheckDiffusePoints();
+	void onLoopViewClick();
+
+	enum class ViewType{SINGLE, LEFT_RIGHT, TOP_BOTTOM, QUAD};
+	void setViewType(ViewType type);
 
   const std::unique_ptr<Ui::ReindeerClass> ui;
+	ViewType currentViewType = ViewType::SINGLE;
+	int currentLoopViewIndex = 0;
+	int loopViewTimerID = 0;
 };
 
 #endif // REINDEER_H

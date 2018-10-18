@@ -16,7 +16,7 @@ namespace
 {
 	constexpr auto simulationWidth = 500.f;
 	constexpr auto simulationHeight = 500.f;
-	constexpr size_t nPoints = 1'000'000;
+	constexpr size_t nPoints = 100'000;
 }
 
 QtPointRenderView::QtPointRenderView(QWidget *parent) :
