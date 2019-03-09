@@ -20,9 +20,7 @@ namespace obelisk
 		};
 	}
 
-	///
-	/// \brief 3x3 box blur implementation (Naive)
-	///
+	/// 3x3 box blur implementation (Naive)
 	template <typename T>
 	void boxBlur3x3(std::vector<T> &inputOutput, size_t width)
 	{
@@ -101,9 +99,7 @@ namespace obelisk
 			}
 	}
 
-	///
-	/// \brief function to create a gaussian kernel of filterWidth*filterWidth with the specified sigma
-	///
+	/// function to create a gaussian kernel of filterWidth*filterWidth with the specified sigma
 	template <typename T, bool normalise>
 	std::vector<T> create2DGaussianKernel(size_t filterWidth, T sigma)
 	{

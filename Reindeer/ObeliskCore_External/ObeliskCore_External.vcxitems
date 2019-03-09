@@ -20,6 +20,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)BackBufferT.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)BackgroundContainerProducerT.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)BackgroundThreadDeleter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Box.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Command.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)CommandWithFutureReturn.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ConcurrencyUtilsT.h" />
@@ -35,12 +36,16 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)GeneralHelpers.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)HeapArray.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ImageFilters.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)LazyEval.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)LockFreeConcurrentQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)LockUtilsT.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MemoizedValue.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MultiVector.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Octree.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Optional.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)DataSourceWithPolling.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ParallelSort.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)StackVector.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)StdLockUtilsT.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MutexedObject.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ObeliskMeta.h" />
@@ -49,6 +54,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)StdThreadSupportWrappers.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)StringFuncs.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SubjectWithEvents.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)VectorT.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)WaitableCommand.h" />
   </ItemGroup>
   <ItemGroup>

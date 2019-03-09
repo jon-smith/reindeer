@@ -7,8 +7,8 @@
 namespace obelisk
 {
 	// AsyncEvent adds functionality for invoking event handlers asynchronously (through a queue)
-	template <typename...Args>
-	class AsyncEvent : public Event<Args...>
+	template <bool useSharedQueue, typename...Args>
+	class AsyncEventImpl : public Event<Args...>
 	{
 		static_assert(ContainsReference<Args...>::value == false, "Async event arguments should not be reference types");
 
@@ -16,9 +16,9 @@ namespace obelisk
 
 	public:
 
-		AsyncEvent() = delete;
+		AsyncEventImpl() = delete;
 
-		AsyncEvent(SubjectWithEvents &owner, std::wstring name) :
+		AsyncEventImpl(SubjectWithEvents &owner, std::wstring name) :
 			Event(owner, name),
 			eventHandler(std::function<void(Args...)>([this](Args...args)
 		{
@@ -44,6 +44,12 @@ namespace obelisk
 
 	private:
 
-		mutable AsyncEventHandler<Args...> eventHandler;
+		mutable AsyncEventHandler<useSharedQueue, Args...> eventHandler;
 	};
+
+	template<typename...Args>
+	using AsyncEvent = AsyncEventImpl<false, Args...>;
+
+	template<typename...Args>
+	using AsyncEventShared = AsyncEventImpl<true, Args...>;
 }

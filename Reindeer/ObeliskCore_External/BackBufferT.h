@@ -9,7 +9,7 @@
 namespace obelisk
 {
 	///
-	/// \brief Base template class to enable double buffered data generation
+	/// Base template class to enable double buffered data generation
 	///
 	/// Data is generated in a background thread which calls the virtual updateBackBuffer() function
 	/// A single update can be requested using requestUpdate()

@@ -33,9 +33,11 @@ namespace obelisk
 		std::wstring getExecutablePath();
 		std::wstring getExecutableDirectory();
 
-		enum class ThreadPriority{BACKGROUND, NORMAL, HIGH, VERY_HIGH};
+		enum class ThreadPriority { BACKGROUND, NORMAL, HIGH, VERY_HIGH };
 		bool setThreadPriority(std::thread &thread, ThreadPriority priority);
 		bool setCurrentThreadPriority(ThreadPriority priority);
+
+		unsigned getCurrentProcessThreadCount();
 
 		bool delayLoadDLL(std::wstring dllname);
 	};

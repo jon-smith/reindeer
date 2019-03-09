@@ -13,6 +13,8 @@
 
 #include "FormatString.hpp"
 
+#pragma warning(disable: 4996)
+
 namespace obelisk
 {
 	std::string wStrToStr(const std::wstring& wStr)
@@ -169,26 +171,28 @@ namespace obelisk
 		return r;
 	}
 
-	std::string stringJoin(const std::vector<std::string>& src, std::string separator)
+	std::string stringJoin(const std::vector<std::string>& strings, std::string separator)
 	{
-		std::string r;
-		for (int i = 0; i < src.size(); i++) {
-			r += src[i];
-			if (i != src.size() - 1)
-				r += separator;
+		std::string joined;
+		for (size_t i = 0; i < strings.size(); ++i)
+		{
+			joined += strings[i];
+			if (i != strings.size() - 1)
+				joined += separator;
 		}
-		return r;
+		return joined;
 	}
 
-	std::wstring stringJoin(const std::vector<std::wstring>& src, std::wstring separator)
+	std::wstring stringJoin(const std::vector<std::wstring>& strings, std::wstring separator)
 	{
-		std::wstring r;
-		for (int i = 0; i < src.size(); i++) {
-			r += src[i];
-			if (i != src.size() - 1)
-				r += separator;
+		std::wstring joined;
+		for (size_t i = 0; i < strings.size(); ++i)
+		{
+			joined += strings[i];
+			if (i != strings.size() - 1)
+				joined += separator;
 		}
-		return r;
+		return joined;
 	}
 
 	// Functions below from http://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring?rq=1
@@ -213,6 +217,20 @@ namespace obelisk
 	std::string trim(std::string str)
 	{
 		return trimLeft(trimRight(str));
+	}
+
+	std::string toLower(const std::string &str)
+	{
+		std::string lower;
+		std::transform(str.begin(), str.end(), std::back_inserter(lower), [](auto c) {return tolower(c); });
+		return lower;
+	}
+
+	std::string toUpper(const std::string &str)
+	{
+		std::string upper;
+		std::transform(str.begin(), str.end(), std::back_inserter(upper), [](auto c) {return toupper(c); });
+		return upper;
 	}
 
 	bool startsWith(const std::string& str, const std::string& start)

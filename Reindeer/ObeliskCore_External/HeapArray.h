@@ -7,12 +7,9 @@
 
 namespace obelisk
 {
-	///
-	/// \brief static size array, but memory allocated on the heap
-	///        allows large arrays with the safety and efficiency of static size
-	///
+	/// static size array, but memory allocated on the heap
+	/// allows large arrays with the safety and efficiency of static size
 	/// Definition compatible with STL - mostly copied from VS2015 std::array
-	///
 	template <typename T, size_t Size>
 	class HeapArray
 	{
@@ -25,7 +22,7 @@ namespace obelisk
 		using const_pointer = const T*;
 		using reference = T&;
 		using const_reference = const T&;
-		
+
 		using iterator = typename std::array<T, Size>::iterator;
 		using const_iterator = typename std::array<T, Size>::const_iterator;
 
@@ -46,14 +43,14 @@ namespace obelisk
 		}
 
 		HeapArray(HeapArray &&other) noexcept :
-			internalArray(std::move(other.internalArray))
+		internalArray(std::move(other.internalArray))
 		{
 		}
 
 		HeapArray(const HeapArray &other) :
 			internalArray(std::make_unique<T[]>(Size))
 		{
-      std::copy(std::begin(other), std::end(other), begin());
+			std::copy(std::begin(other), std::end(other), begin());
 		}
 
 		~HeapArray() = default;
@@ -191,7 +188,7 @@ namespace obelisk
 
 		T *data() noexcept
 		{
-      return internalArray.get();
+			return internalArray.get();
 		}
 
 		const T *data() const noexcept
@@ -199,7 +196,7 @@ namespace obelisk
 			return internalArray;
 		}
 
-		void swap(HeapArray<T,Size>& other) noexcept
+		void swap(HeapArray<T, Size>& other) noexcept
 		{
 			std::swap(internalArray, other.internalArray);
 		}

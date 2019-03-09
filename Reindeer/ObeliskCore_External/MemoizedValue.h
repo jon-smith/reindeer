@@ -6,9 +6,7 @@
 
 namespace obelisk
 {
-	///
-	/// \brief Value is calculated on first call to get() and then stored for subsequent calls
-	///
+	/// Value is calculated on first call to get() and then stored for subsequent calls
 	template <typename T>
 	class MemoizedValue
 	{
@@ -19,7 +17,6 @@ namespace obelisk
 		template <typename CreateFunc>
 		explicit MemoizedValue(CreateFunc &&fn) : fn(fn)
 		{
-			static_assert(std::is_same<std::result_of_t<CreateFunc(void)>, T>::value, "Supplied function must return T");
 		}
 
 		T get() const
