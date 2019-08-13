@@ -7,6 +7,9 @@
     <Filter Include="ZMQ">
       <UniqueIdentifier>{da8459d1-ce31-46e9-af6c-aa64e8281f3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PaceCurve">
+      <UniqueIdentifier>{a804e2c5-d33a-4e84-9d59-8f8fa9fa68ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DiffusionSimulator.cpp">
@@ -14,6 +17,9 @@
     </ClCompile>
     <ClCompile Include="MessageQueue.cpp">
       <Filter>ZMQ</Filter>
+    </ClCompile>
+    <ClCompile Include="PaceCurve.cpp">
+      <Filter>PaceCurve</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -28,6 +34,12 @@
     </ClInclude>
     <ClInclude Include="MessageQueue.h">
       <Filter>ZMQ</Filter>
+    </ClInclude>
+    <ClInclude Include="PaceCurve.h">
+      <Filter>PaceCurve</Filter>
+    </ClInclude>
+    <ClInclude Include="ActivityStructures.h">
+      <Filter>PaceCurve</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
