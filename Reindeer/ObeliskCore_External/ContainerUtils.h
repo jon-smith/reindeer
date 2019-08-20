@@ -1,11 +1,23 @@
 #pragma once
 
 #include <vector>
+#include <functional>
 
 #include "FormatString.hpp"
 
 namespace obelisk
 {
+	template <typename OutT, typename InContainerT, typename ConvertFnT>
+	std::vector<OutT> convertAll(InContainerT &&in, ConvertFnT &&converter)
+	{
+		std::vector<OutT> out;
+
+		for (const auto &i : in)
+			out.push_back(converter(i));
+
+		return out;
+	}
+
 	template <typename ContainerT, typename Comparator = std::less<typename ContainerT::value_type>>
 	auto restrictToIncreasingRange(const size_t fromIndex, const ContainerT &container, Comparator&& comparator = Comparator()) ->
 		std::vector<typename ContainerT::value_type>
