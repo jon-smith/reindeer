@@ -21,13 +21,7 @@ namespace reindeer
 		const std::vector<GpxPoint> &gpxData, 
 		const double min_m, 
 		const double resolution_m,
-		const double maxElevationLoss_m);
-
-	std::vector<PaceCurvePoint> calculatePaceCurve(
-		const std::vector<DistTimeElev> &motionData,
-		const double min_m,
-		const double resolution_m,
-		const double maxElevationLoss_m);
+		const double minElevationDiff_m);
 
 	std::vector<PaceCurvePoint> mergePaceCurves(const std::vector<std::vector<PaceCurvePoint>> &paceCurves);
 }

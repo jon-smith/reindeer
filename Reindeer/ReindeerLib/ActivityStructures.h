@@ -71,6 +71,22 @@ namespace reindeer
 
 		}
 
+		static DistTimeElev zero()
+		{
+			return DistTimeElev(
+				DistanceTime(0.0, 0.0),
+				ElevationInfo(0.0, 0.0));
+		}
+
+		static DistTimeElev sum(const DistTimeElev &a, const DistTimeElev &b)
+		{
+			return DistTimeElev(
+				DistanceTime(a.distanceTime.distance_m + b.distanceTime.distance_m,
+					a.distanceTime.time_s + b.distanceTime.time_s),
+				ElevationInfo(a.elevation.elevationDiff_m + b.elevation.elevationDiff_m,
+					a.elevation.cumulativeElevation_m + b.elevation.cumulativeElevation_m));
+		}
+
 		static DistTimeElev fromGpx(const GpxPoint &from, const GpxPoint &to)
 		{
 			// Calculate distance from long/lat change
