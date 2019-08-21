@@ -8,12 +8,14 @@ namespace reindeer
 {
 	struct PaceCurvePoint
 	{
-		DistanceTime distanceTime;
+		double distance_m = 0.0;
+		DistTimeElev bestPaceSegment = DistTimeElev::zero();
 
-		PaceCurvePoint(DistanceTime distanceTime) :
-			distanceTime(distanceTime)
+		PaceCurvePoint() = default;
+
+		PaceCurvePoint(double distance_m, DistTimeElev bestPaceSegment) :
+			distance_m(distance_m), bestPaceSegment(bestPaceSegment)
 		{
-
 		}
 	};
 
