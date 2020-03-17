@@ -21,7 +21,7 @@ public:
 private:
 	void timerEvent(QTimerEvent *event) override;
 	void doNextLoopView();
-  void onResetButton();
+	void onResetButton();
 	void onCheckDiffusePoints();
 	void onLoopViewClick();
 

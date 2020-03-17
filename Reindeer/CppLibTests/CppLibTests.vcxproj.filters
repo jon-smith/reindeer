@@ -26,5 +26,8 @@
     <ClCompile Include="MessageQueueTests.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="ChartTests.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

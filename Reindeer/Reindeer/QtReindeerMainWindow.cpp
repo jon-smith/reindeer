@@ -4,12 +4,12 @@
 #include "ui_reindeer.h"
 
 QtReindeerMainWindow::QtReindeerMainWindow(QWidget *parent)
-  : QMainWindow(parent),
-  ui(std::make_unique<Ui::ReindeerClass>())
+	: QMainWindow(parent),
+	ui(std::make_unique<Ui::ReindeerClass>())
 {
-  ui->setupUi(this);
+	ui->setupUi(this);
 
-  connect(ui->resetButton, &QPushButton::clicked, [this] {onResetButton(); });
+	connect(ui->resetButton, &QPushButton::clicked, [this] {onResetButton(); });
 	connect(ui->diffuseCheck, &QCheckBox::clicked, [this] {onCheckDiffusePoints(); });
 	connect(ui->singleViewButton, &QPushButton::clicked, [this] {setViewType(ViewType::SINGLE); });
 	connect(ui->leftRightViewButton, &QPushButton::clicked, [this] {setViewType(ViewType::LEFT_RIGHT); });
@@ -65,7 +65,7 @@ void QtReindeerMainWindow::doNextLoopView()
 
 void QtReindeerMainWindow::onResetButton()
 {
-  ui->mainView0->initPoints();
+	ui->mainView0->initPoints();
 	ui->mainView1->initPoints();
 	ui->mainView2->initPoints();
 	ui->mainView3->initPoints();

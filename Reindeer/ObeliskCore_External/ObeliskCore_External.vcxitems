@@ -21,6 +21,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)BackgroundContainerProducerT.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)BackgroundThreadDeleter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Box.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ColourStructs.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Command.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)CommandWithFutureReturn.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ConcurrencyUtilsT.h" />

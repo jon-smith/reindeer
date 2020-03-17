@@ -10,6 +10,9 @@
     <Filter Include="PaceCurve">
       <UniqueIdentifier>{a804e2c5-d33a-4e84-9d59-8f8fa9fa68ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Charts">
+      <UniqueIdentifier>{59d2d8bb-f366-4408-87b5-cb046a5b0d64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DiffusionSimulator.cpp">
@@ -20,6 +23,15 @@
     </ClCompile>
     <ClCompile Include="PaceCurve.cpp">
       <Filter>PaceCurve</Filter>
+    </ClCompile>
+    <ClCompile Include="ChartStructures.cpp">
+      <Filter>Charts</Filter>
+    </ClCompile>
+    <ClCompile Include="SeriesHelpers.cpp">
+      <Filter>Charts</Filter>
+    </ClCompile>
+    <ClCompile Include="TickHelpers.cpp">
+      <Filter>Charts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,6 +52,15 @@
     </ClInclude>
     <ClInclude Include="ActivityStructures.h">
       <Filter>PaceCurve</Filter>
+    </ClInclude>
+    <ClInclude Include="ChartStructures.h">
+      <Filter>Charts</Filter>
+    </ClInclude>
+    <ClInclude Include="SeriesHelpers.h">
+      <Filter>Charts</Filter>
+    </ClInclude>
+    <ClInclude Include="TickHelpers.h">
+      <Filter>Charts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

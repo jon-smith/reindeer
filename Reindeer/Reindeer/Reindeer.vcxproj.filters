@@ -90,6 +90,30 @@
     <ClCompile Include="GeneratedFiles\Release\moc_QtSpinBox2.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="QtChartPage.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_QtChartPage.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_QtChartPage.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="QtChartHelpers.cpp">
+      <Filter>UI_Generic</Filter>
+    </ClCompile>
+    <ClCompile Include="QtChartView.cpp">
+      <Filter>UI_Generic</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_QtChartView.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_QtChartView.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="QtDrawingHelpers.cpp">
+      <Filter>UI_Generic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_reindeer.h">
@@ -100,6 +124,15 @@
     </ClInclude>
     <ClInclude Include="QtPointRenderView.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_chartPage.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QtChartHelpers.h">
+      <Filter>UI_Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="QtDrawingHelpers.h">
+      <Filter>UI_Generic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +152,15 @@
       <Filter>UI_Generic</Filter>
     </CustomBuild>
     <CustomBuild Include="QtSpinBox2.h">
+      <Filter>UI_Generic</Filter>
+    </CustomBuild>
+    <CustomBuild Include="chartPage.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="QtChartPage.h">
+      <Filter>UI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="QtChartView.h">
       <Filter>UI_Generic</Filter>
     </CustomBuild>
   </ItemGroup>

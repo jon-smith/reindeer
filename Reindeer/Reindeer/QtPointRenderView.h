@@ -65,7 +65,7 @@ private:
 	const std::unique_ptr<QTimer> mouseDownTimer;
 
 	// Options
-	bool doPositionAndColourUpdates = true;
+	bool doPositionAndColourUpdates = false;
 
 	const std::unique_ptr<reindeer::DiffusionSimulator> simulator;
 };
