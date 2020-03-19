@@ -28,7 +28,9 @@ private:
 	enum class ViewType{SINGLE, LEFT_RIGHT, TOP_BOTTOM, QUAD};
 	void setViewType(ViewType type);
 
-  const std::unique_ptr<Ui::ReindeerClass> ui;
+	void updateAppPalette();
+
+	const std::unique_ptr<Ui::ReindeerClass> ui;
 	ViewType currentViewType = ViewType::SINGLE;
 	int currentLoopViewIndex = 0;
 	int loopViewTimerID = 0;

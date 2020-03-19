@@ -3,6 +3,8 @@
 
 #include "ui_reindeer.h"
 
+#include "QtAppStyle.h"
+
 QtReindeerMainWindow::QtReindeerMainWindow(QWidget *parent)
 	: QMainWindow(parent),
 	ui(std::make_unique<Ui::ReindeerClass>())
@@ -16,6 +18,9 @@ QtReindeerMainWindow::QtReindeerMainWindow(QWidget *parent)
 	connect(ui->topBottomViewButton, &QPushButton::clicked, [this] {setViewType(ViewType::TOP_BOTTOM); });
 	connect(ui->quadViewButton, &QPushButton::clicked, [this] {setViewType(ViewType::QUAD); });
 	connect(ui->loopViewButton, &QPushButton::clicked, [this] {onLoopViewClick(); });
+	connect(ui->actionDarkTheme, &QAction::triggered, [this] { updateAppPalette(); });
+
+	updateAppPalette();
 
 	onResetButton();
 }
@@ -110,4 +115,21 @@ void QtReindeerMainWindow::setViewType(ViewType type)
 	ui->mainView1->setVisible(currentViewType == ViewType::QUAD);
 	ui->mainView2->show();
 	ui->mainView3->setVisible(currentViewType == ViewType::LEFT_RIGHT || currentViewType == ViewType::QUAD);
+}
+
+void QtReindeerMainWindow::updateAppPalette()
+{
+	const auto app = dynamic_cast<QApplication*>(QApplication::instance());
+	if (app)
+	{
+		const auto darkTheme = ui->actionDarkTheme->isChecked();
+		if (darkTheme)
+		{
+			qt_app_style::setDarkTheme(*app);
+		}
+		else
+		{
+			qt_app_style::setLightTheme(*app);
+		}
+	}
 }

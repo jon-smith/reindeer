@@ -27,6 +27,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Continuously generates new random chart data</string>
+       </property>
        <property name="text">
         <string>Generate</string>
        </property>

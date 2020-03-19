@@ -40,6 +40,9 @@
     <Filter Include="UI_Generic">
       <UniqueIdentifier>{7e46b12a-be73-416f-9312-f8ebd563d9ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI_Helpers">
+      <UniqueIdentifier>{dd3a0c05-e167-48bf-a5ff-b841fdbdb477}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -114,6 +117,9 @@
     <ClCompile Include="QtDrawingHelpers.cpp">
       <Filter>UI_Generic</Filter>
     </ClCompile>
+    <ClCompile Include="QtAppStyle.cpp">
+      <Filter>UI_Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_reindeer.h">
@@ -133,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="QtDrawingHelpers.h">
       <Filter>UI_Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="QtAppStyle.h">
+      <Filter>UI_Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
